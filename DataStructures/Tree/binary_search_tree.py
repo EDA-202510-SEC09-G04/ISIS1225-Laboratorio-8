@@ -48,7 +48,7 @@ def insert_node(root,key,value):
 def get(my_bst,key):
     
     
-    node = get_node(my_bst['root', key])
+    node = get_node(my_bst['root'],key)
     if node is not None:
         
         return node['value']
@@ -140,3 +140,70 @@ def remove_node(root,key):
     
     
     return root
+
+
+
+
+def contains(my_bst,key):
+    
+   nodo =  get(my_bst,key)
+   
+   
+   if nodo is not None:
+       
+       return True
+   
+   else:
+       
+       return False
+   
+   
+   
+   
+def size(my_bst):
+    
+    return size_tree(my_bst['root'])
+   
+def size_tree(root):
+    
+    if root is None:
+        
+        return 0
+    
+    return 1 + size_tree(root['right']) + size_tree(root['left'])
+
+
+
+def is_empty(my_bst):
+    
+    if my_bst['root'] is None:
+        
+        return True
+    
+    else:
+        
+        return False
+    
+    
+    
+def key_set(my_bst):
+    
+    
+    return key_set_tree(my_bst['root'],None)
+    
+    
+def key_set_tree(root, resultado = None):
+    
+    if resultado is None:
+        
+        resultado = []
+        
+        
+    if root is not None:
+        
+        
+        key_set_tree(root['left'],resultado)
+        resultado.append(root['key'])
+        key_set_tree(root['right'], resultado)
+        
+    return resultado
