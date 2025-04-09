@@ -1,6 +1,5 @@
 
-import bst_node as bst
-
+import DataStructures.Tree.bst_node as bst
 
 
 def new_map():
@@ -15,6 +14,7 @@ def put (my_bst, key,value):
     
    my_bst['root'] =  insert_node(my_bst['root'],key,value)
    
+   return my_bst
    
 
 def insert_node(root,key,value):
@@ -45,15 +45,12 @@ def insert_node(root,key,value):
 
 
 def get(my_bst,key):
-    
+
     
     node = get_node(my_bst['root'],key)
     if node is not None:
-        
         return node['value']
-    
     else:
-        
         return None
 
 

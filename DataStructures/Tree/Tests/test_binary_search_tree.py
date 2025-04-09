@@ -1,7 +1,7 @@
 from DataStructures.Tree import binary_search_tree as bst
+
 from DataStructures.Tree import bst_node as bst_node
 from DataStructures.Utils.utils import handle_not_implemented
-
 
 def default_compare_test(a, b):
     if a > bst_node.get_key(b):
