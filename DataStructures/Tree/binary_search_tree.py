@@ -1,6 +1,6 @@
 
 from pprint import pprint
-from DataStructures.List.array_list import add_last, new_list
+from DataStructures.List.single_linked_list import add_last, new_list
 import DataStructures.Tree.bst_node as bst
 
 
@@ -78,6 +78,7 @@ def encontrar_minimo(nodo):
 def remove(my_bst,key):
     
     my_bst['root'] = remove_node(my_bst['root'],key)
+    return my_bst
 
 
 def remove_node(root,key):
@@ -186,14 +187,14 @@ def key_set_tree(root, resultado = None):
     
     if resultado is None:
         
-        resultado = []
+        resultado = new_list()
         
         
     if root is not None:
         
         
         key_set_tree(root['left'],resultado)
-        resultado.append(root['key'])
+        add_last(resultado,root['key'])
         key_set_tree(root['right'], resultado)
         
     return resultado
@@ -209,11 +210,11 @@ def value_set(my_bst):
 
 def value_set_tree(root, resultado=None):
     if resultado is None:
-        resultado = []
+        resultado = new_list()
 
     if root is not None:
         value_set_tree(root['left'], resultado)
-        resultado.append(root['value']) 
+        add_last(resultado,root['value'])
         value_set_tree(root['right'], resultado)
 
     return resultado
@@ -380,7 +381,7 @@ def height(my_bst):
 
 def height_tree(root):
     if root is None:
-        return -1  
+        return 0
 
     left_height = height_tree(root['left'])
     right_height = height_tree(root['right'])
@@ -388,8 +389,10 @@ def height_tree(root):
     return 1 + max(left_height, right_height)
 
 def keys(my_bst, key_initial, key_final):
-    list_key = new_list()  
+    list_key = new_list()
+    keys_range(my_bst['root'], key_initial, key_final, list_key)
     return list_key
+
 
 def keys_range(root, key_initial, key_final, list_key):
     if root is None:
@@ -405,22 +408,26 @@ def keys_range(root, key_initial, key_final, list_key):
         keys_range(root['right'], key_initial, key_final, list_key)
 
 def values(my_bst, key_initial, key_final):
-    list_value = new_list() 
-    values_range(my_bst['root'], key_initial, key_final, list_value)
-    return list_value
+    list_values = new_list()
+    values_range(my_bst['root'], key_initial, key_final, list_values)
+    return list_values
 
-def values_range(root, key_initial, key_final, list_value):
+
+def values_range(root, key_initial, key_final, list_values):
     if root is None:
         return
 
+    # Buscar en el subárbol izquierdo si es posible
     if root['key'] > key_initial:
-        values_range(root['left'], key_initial, key_final, list_value)
+        values_range(root['left'], key_initial, key_final, list_values)
 
+    # Solo agregar si está dentro del rango
     if key_initial <= root['key'] <= key_final:
-        add_last(list_value, root['value'])  #
+        add_last(list_values, root['value'])
 
+    # Buscar en el subárbol derecho si es posible
     if root['key'] < key_final:
-        values_range(root['right'], key_initial, key_final, list_value)
+        values_range(root['right'], key_initial, key_final, list_values)
 
 
 def default_compare(key, element):
