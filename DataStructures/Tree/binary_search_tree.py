@@ -1,5 +1,6 @@
 
 from pprint import pprint
+from DataStructures.List.array_list import add_last, new_list
 import DataStructures.Tree.bst_node as bst
 
 
@@ -119,6 +120,11 @@ def remove_node(root,key):
         root['key'] = sucesor['key']
         root['value'] = sucesor['value']
         root['right'] = remove_node(root['right'], sucesor['key'])
+        
+    left_size = root['left']['size'] if root['left'] else 0
+    right_size = root['right']['size'] if root['right'] else 0
+    root['size'] = 1 + left_size + right_size
+
     
     
     return root
@@ -140,12 +146,14 @@ def contains(my_bst,key):
        return False
    
    
-   
+
    
 def size(my_bst):
     
     return size_tree(my_bst['root'])
    
+
+
 def size_tree(root):
     
     if root is None:
@@ -192,3 +200,232 @@ def key_set_tree(root, resultado = None):
 
 
 #COMIENZO FUNCIONES POR DESARROLLAR
+
+
+
+def value_set(my_bst):
+    return value_set_tree(my_bst['root'], None)
+
+
+def value_set_tree(root, resultado=None):
+    if resultado is None:
+        resultado = []
+
+    if root is not None:
+        value_set_tree(root['left'], resultado)
+        resultado.append(root['value']) 
+        value_set_tree(root['right'], resultado)
+
+    return resultado
+
+def get_min(my_bst):
+    min_node = get_min_node(my_bst['root'])
+    if min_node is not None:
+        return min_node['key']
+    else:
+        return None
+
+def get_min_node(node):
+    current = node
+    while current is not None and current['left'] is not None:
+        current = current['left']
+    return current
+
+
+
+def get_max(my_bst):
+    max_node = get_max_node(my_bst['root'])
+    if max_node is not None:
+        return max_node['key']
+    else:
+        return None
+
+def get_max_node(node):
+    current = node
+    while current is not None and current['right'] is not None:
+        current = current['right']
+    return current
+
+def delete_min(my_bst):
+    my_bst['root'] = delete_min_tree(my_bst['root'])
+    return my_bst
+
+def delete_min_tree(node):
+    if node is None:
+        return None
+
+    # Caso base: si ya no hay hijo izquierdo, este es el mínimo
+    if node['left'] is None:
+        return node['right']
+
+    node['left'] = delete_min_tree(node['left'])
+
+    left_size = node['left']['size'] if node['left'] else 0
+    right_size = node['right']['size'] if node['right'] else 0
+    node['size'] = 1 + left_size + right_size
+
+    return node
+
+def delete_max(my_bst):
+    my_bst['root'] = delete_max_tree(my_bst['root'])
+    return my_bst
+def delete_max_tree(node):
+    if node is None:
+        return None
+
+    if node['right'] is None:
+        return node['left']  
+
+    node['right'] = delete_max_tree(node['right'])
+
+    left_size = node['left']['size'] if node['left'] else 0
+    right_size = node['right']['size'] if node['right'] else 0
+    node['size'] = 1 + left_size + right_size
+
+    return node
+
+
+def floor(my_bst, key):
+    result = floor_key(my_bst['root'], key)
+    if result is not None:
+        return result['key']
+    else:
+        return None
+
+def floor_key(root, key):
+    if root is None:
+        return None
+
+    if root['key'] == key:
+        return root
+
+    if root['key'] > key:
+        return floor_key(root['left'], key)
+
+    temp = floor_key(root['right'], key)
+    if temp is not None:
+        return temp
+    else:
+        return root
+    
+def ceiling(my_bst, key):
+    result = ceiling_key(my_bst['root'], key)
+    if result is not None:
+        return result['key']
+    else:
+        return None
+    
+def ceiling_key(root, key):
+    if root is None:
+        return None
+
+    if root['key'] == key:
+        return root
+
+    if root['key'] < key:
+        return ceiling_key(root['right'], key)
+
+    temp = ceiling_key(root['left'], key)
+    if temp is not None:
+        return temp
+    else:
+        return root
+
+def select(my_bst, pos):
+    node = select_key(my_bst['root'], pos)
+    if node is not None:
+        return node['key']
+    else:
+        return None
+
+def select_key(root, pos):
+    if root is None:
+        return None
+
+    left_size = 0
+    if root['left'] is not None:
+        left_size = root['left']['size']
+
+    if pos < left_size:
+        return select_key(root['left'], pos)
+    elif pos > left_size:
+        return select_key(root['right'], pos - left_size - 1)
+    else:
+        return root
+
+def rank(my_bst, key):
+    return rank_keys(my_bst['root'], key)
+
+def rank_keys(root, key):
+    if root is None:
+        return 0
+
+    if key < root['key']:
+        return rank_keys(root['left'], key)
+    
+    elif key > root['key']:
+        left_size = 0
+        if root['left'] is not None:
+            left_size = root['left']['size']
+        return 1 + left_size + rank_keys(root['right'], key)
+    
+    else: 
+        left_size = 0
+        if root['left'] is not None:
+            left_size = root['left']['size']
+        return left_size
+    
+def height(my_bst):
+    return height_tree(my_bst['root'])
+
+def height_tree(root):
+    if root is None:
+        return -1  
+
+    left_height = height_tree(root['left'])
+    right_height = height_tree(root['right'])
+
+    return 1 + max(left_height, right_height)
+
+def keys(my_bst, key_initial, key_final):
+    list_key = new_list()  
+    return list_key
+
+def keys_range(root, key_initial, key_final, list_key):
+    if root is None:
+        return
+
+    if root['key'] > key_initial:
+        keys_range(root['left'], key_initial, key_final, list_key)
+
+    if key_initial <= root['key'] <= key_final:
+        add_last(list_key, root['key'])  
+
+    if root['key'] < key_final:
+        keys_range(root['right'], key_initial, key_final, list_key)
+
+def values(my_bst, key_initial, key_final):
+    list_value = new_list() 
+    values_range(my_bst['root'], key_initial, key_final, list_value)
+    return list_value
+
+def values_range(root, key_initial, key_final, list_value):
+    if root is None:
+        return
+
+    if root['key'] > key_initial:
+        values_range(root['left'], key_initial, key_final, list_value)
+
+    if key_initial <= root['key'] <= key_final:
+        add_last(list_value, root['value'])  #
+
+    if root['key'] < key_final:
+        values_range(root['right'], key_initial, key_final, list_value)
+
+
+def default_compare(key, element):
+   if key == bst.get_key(element):
+      return 0
+   elif key > bst.get_key(element):
+      return 1
+   return -1
