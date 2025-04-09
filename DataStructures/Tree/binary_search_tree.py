@@ -1,4 +1,5 @@
 
+from pprint import pprint
 import DataStructures.Tree.bst_node as bst
 
 
@@ -18,30 +19,39 @@ def put (my_bst, key,value):
    
 
 def insert_node(root,key,value):
-    
-    if root == None:
-        
-        return bst.new_node(key,value)
-
+    if root is None:
+        return bst.new_node(key, value)
 
     if key < root['key']:
-        
-       root['left'] = insert_node(root['left'],key,value)
-        
+        root['left'] = insert_node(root.get('left'), key, value)
     elif key > root['key']:
-        
-        root['right'] = insert_node(root['right'],key,value)
-        
-        
+        root['right'] = insert_node(root.get('right'), key, value)
     else:
-        
         root['value'] = value
-        
-        
+        return root  
+
+    left_size = root['left']['size'] if root['left'] else 0
+    right_size = root['right']['size'] if root['right'] else 0
+    root['size'] = 1 + left_size + right_size
+
     return root
 
 
+# Crea un arbol vacío
+map = new_map()
+print(map)
+# Salida esperada: { "root": None }
 
+# Agrega un nuevo nodo al árbol
+map = put(map, 2, "dos")
+
+# Agrega otro nodo al árbol
+map = put(map, 1, "uno")
+
+# Agrega otro nodo al árbol con una llave ya existente
+map = put(map, 1, "uno modificado")
+
+pprint(map)
 
 
 def get(my_bst,key):
