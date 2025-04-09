@@ -37,22 +37,6 @@ def insert_node(root,key,value):
     return root
 
 
-# Crea un arbol vacío
-map = new_map()
-print(map)
-# Salida esperada: { "root": None }
-
-# Agrega un nuevo nodo al árbol
-map = put(map, 2, "dos")
-
-# Agrega otro nodo al árbol
-map = put(map, 1, "uno")
-
-# Agrega otro nodo al árbol con una llave ya existente
-map = put(map, 1, "uno modificado")
-
-pprint(map)
-
 
 def get(my_bst,key):
 
@@ -64,25 +48,17 @@ def get(my_bst,key):
         return None
 
 
-def get_node (root,key):
-    
-    if root == None:
-        
+def get_node(root, key):
+    if root is None:
         return None
-    
-    if root['key'] == key:
-        
-        return root
-    
-    elif root['key'] < key :
-        
-        return get_node(root['left'],key)
-    
-    elif root['key'] > key:
-        
-        return get_node(root['right'],key)
-        
 
+    if root['key'] == key:
+        return root
+    elif key < root['key']:
+        return get_node(root['left'], key)
+    elif key > root['key']:
+        return get_node(root['right'], key)
+        
 
 
 def encontrar_minimo(nodo):
