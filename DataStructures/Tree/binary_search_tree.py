@@ -11,7 +11,6 @@ def new_map():
 
 
 
-
 def put (my_bst, key,value):
     
    my_bst['root'] =  insert_node(my_bst['root'],key,value)
@@ -207,3 +206,6 @@ def key_set_tree(root, resultado = None):
         key_set_tree(root['right'], resultado)
         
     return resultado
+
+
+#COMIENZO FUNCIONES POR DESARROLLAR
