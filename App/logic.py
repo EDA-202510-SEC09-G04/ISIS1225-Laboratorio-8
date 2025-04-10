@@ -30,6 +30,7 @@ import datetime
 from DataStructures.List import array_list as al
 from DataStructures.Tree import binary_search_tree as bst
 from DataStructures.Map import map_linear_probing as lp
+from DataStructures.List import single_linked_list as sl
 
 
 data_dir = os.path.dirname(os.path.realpath('__file__')) + '/Data/'
@@ -189,34 +190,84 @@ def max_key(analyzer):
 #DEBUG ESTAS DOS FUNCIONE PORQUE NO SIRVEEEEENN TT
 def get_crimes_by_range(analyzer, initialDate, finalDate):
     """
-    Retorna el numero de crimenes en un rago de fechas.
+    Retorna el número de crímenes en un rango de fechas.
     """
     initial = datetime.datetime.strptime(initialDate, "%Y-%m-%d").date()
     final = datetime.datetime.strptime(finalDate, "%Y-%m-%d").date()
 
     entries = bst.values(analyzer['dateIndex'], initial, final)
     total = 0
-    for entry in entries:
-        total += al.size(entry['lstcrimes'])
+
+    if entries is None or sl.is_empty(entries):
+        return 0
+
+    for i in range(sl.size(entries)):
+        entry = sl.get_element(entries, i)
+        total += al.size(entry['lstcrimes'])  
     return total
 
 
 def get_crimes_by_range_code(analyzer, initialDate, offensecode):
     """
-    Para una fecha determinada, retorna el numero de crimenes
-    de un tipo especifico.
+    Para una fecha determinada, retorna el número de crímenes
+    de un tipo específico.
     """
-    date = datetime.datetime.strptime(initialDate, "%Y-%m-%d").date()
-    entries = bst.values(analyzer['dateIndex'], date, date)
-
-    if al.is_empty(entries):
+    try:
+        date = datetime.datetime.strptime(initialDate, "%Y-%m-%d").date()
+    except:
+        print("Formato de fecha inválido. Usa YYYY-MM-DD.")
         return 0
 
-    entry = al.get_element(entries, 0)
+    entries = bst.values(analyzer['dateIndex'], date, date)
+
+    if entries is None or sl.is_empty(entries):
+        return 0
+
+    entry = sl.get_element(entries, 0)
     offenseIndex = entry['offenseIndex']
     offenseEntry = lp.get(offenseIndex, offensecode)
 
     if offenseEntry is None:
         return 0
+
     return al.size(offenseEntry['lstoffenses'])
+
+
+
+def print_offenses_for_date(analyzer, date_str):
+    try:
+        date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+    except:
+        print("Formato de fecha inválido. Usa YYYY-MM-DD.")
+        return
+
+    entries = bst.values(analyzer['dateIndex'], date, date)
+
+    if entries is None or sl.is_empty(entries):
+        print("No hay crímenes registrados en esa fecha.")
+        return
+
+    entry = sl.get_element(entries, 0)
+    offenseIndex = entry['offenseIndex']
+    codes = lp.key_set(offenseIndex)  # ← esto es array_list
+
+    if codes is None or al.is_empty(codes):
+        print("No hay tipos de crimen disponibles para esa fecha.")
+        return
+
+    print(f"Ofensas registradas el {date_str}:")
+    for i in range(al.size(codes)):
+        print("-", al.get_element(codes, i))
+
+def print_available_dates(analyzer):
+    fechas = bst.key_set(analyzer['dateIndex'])
+
+    if fechas is None or sl.is_empty(fechas):
+        print("No hay fechas registradas.")
+        return
+
+    print("Fechas indexadas en el árbol:")
+    for i in range(sl.size(fechas)):
+        print("-", sl.get_element(fechas, i))
+        
 

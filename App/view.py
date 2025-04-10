@@ -59,6 +59,7 @@ def print_menu():
     print("2- Cargar información de crimenes")
     print("3- Consultar crimenes en un rango de fechas")
     print("4- Consultar crimenes por codigo y fecha")
+    print("5- Imprimer fechas indexadas y ofensas por fecha")
     print("0- Salir")
     print("*******************************************")
 
@@ -104,6 +105,15 @@ def main():
                                                         offensecode)
             print("\nTotal de ofensas tipo: " + offensecode + " en esa fecha:  " +
                 str(numoffenses))
+        elif int(inputs[0]) == 5:
+            if control is None:
+                print("Debes inicializar el analizador primero (opción 1).")
+            else:
+                print("\nMostrando fechas indexadas y ofensas por fecha:")
+                fecha = input("Ingrese una fecha (YYYY-MM-DD): ")
+                logic.print_available_dates(control)
+                logic.print_offenses_for_date(control, fecha)
+        
 
         else:
             sys.exit(0)
